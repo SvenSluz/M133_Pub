@@ -40,7 +40,8 @@ export class ToDo extends EventTarget {
         checkboxElement.setAttribute('type', 'checkbox');
 
         checkboxElement.addEventListener('change', (e) => {
-            this.#erledigt = e.currentTarget.checked;
+            this.erledigt = e.currentTarget.checked;
+            this.dispatchEvent(new Event('crossed'))
         })
 
         buttonElement.className = 'loeschen';

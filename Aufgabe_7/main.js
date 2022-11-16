@@ -1,10 +1,19 @@
 import {ToDo} from './todo.js';
 
-let todos = [
+let todos = {}
+todos = [
     new ToDo('Zugticket kaufen', false),
     new ToDo('Wäsche waschen', true),
     new ToDo('Hausaufgaben machen', true),
 ];
+
+function InsertInLocalStorage() {
+
+    localStorage.clear();
+    for (const todo of todos) {
+        localStorage.setItem(todos.indexOf(todo), JSON.stringify({titel: todo.titel, erledigt: todo.erledigt}));
+    }
+}
 
 function updateToDoListOnScreen() {
     const todoListElement = document.getElementById('todolist');
@@ -13,15 +22,19 @@ function updateToDoListOnScreen() {
     todoListElement.innerHTML = '';
 
     // ToDo's einfügen
-    for (const todo of todos) {
+    for (const todo of todos.sort((a, b) => a.titel.localeCompare(b.titel))) {
+
         const toDoListEntry = todo.element();
         todoListElement.appendChild(toDoListEntry);
     }
+
+    InsertInLocalStorage()
 
     // offene ToDo's
     const offeneToDos = todos.filter((offen) => !offen.erledigt);
     const elementAnzahl = document.getElementById('anzahl');
     elementAnzahl.textContent = `${offeneToDos.length} ToDo's offen`;
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -44,6 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
             todo.addEventListener('loeschen', (e) => {
                 const index = todos.indexOf(e.target);
                 todos.splice(index, 1);
+                updateToDoListOnScreen();
+            });
+
+            todo.addEventListener('crossed', () => {
                 updateToDoListOnScreen();
             });
 
