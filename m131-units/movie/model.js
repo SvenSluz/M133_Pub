@@ -17,7 +17,7 @@ function insert(movie) {
 
 function update(movie) {
     movie.id = parseInt(movie.id, 10);
-    const index = data.findIndex((m) => m.year === movie.year && m.title === movie.title);
+    const index = data.findIndex((m) => m.id === movie.id);
     data[index] = movie;
 
 }
